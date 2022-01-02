@@ -27,7 +27,6 @@ export class TestDirective {
   ) {}
 
   createSomething() {
-    console.log('im here');
 
     //   console.log(this.template);
 

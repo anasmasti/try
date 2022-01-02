@@ -2,8 +2,11 @@ import {
   AfterViewInit,
   Component,
   ComponentFactoryResolver,
+  DoCheck,
   ElementRef,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -39,11 +42,13 @@ let useDataServiceProvider = {
 @TestDesorator({
   name: 'data',
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, DoCheck {
   @ViewChild(DynamicDirective, { static: true }) targetDiv!: DynamicDirective;
+
   dataForm!: FormGroup;
   dataToShow: any[];
   testValue: any;
+  component: any;
 
   constructor(
     private fb: FormBuilder,
@@ -62,6 +67,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.doSomething();
   }
 
+
+  ngDoCheck(): void {
+    console.log('docheck');
+    
+    this.component = this.targetDiv.view.createComponent(TestComponent);
+  }
+
   getDataFromService() {
     this.dataService.getData().subscribe((data) => {
       this.dataToShow = data;
@@ -76,19 +88,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   generateComponent(): void {
-   let component = this.targetDiv.view.createComponent(TestComponent);
-   component.instance.data = {
+    
+   this.component.instance.data = {
      title: 'test component'
    }
   }
 
   removeComponent(): void {
 
-    this.targetDiv
-  }
-
-  ngAfterViewInit(): void {
-    console.log(this.targetDiv);
+    this.component.destroy()
   }
 
   doSomething() {}
