@@ -11,3 +11,6 @@
 <ng-container *ngFor="let data of dataToShow">
     <h1>{{data.name}}</h1>
 </ng-container>
+<div *appNgIfTest='true'>Dive here</div>
+<ng-template appDynamic></ng-template>
+<button (click)='generateComponent()'>{{'generate Component' | titlecase}}</button>

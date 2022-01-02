@@ -1,9 +1,12 @@
 import {
   AfterViewInit,
   Component,
+  ComponentFactoryResolver,
   ElementRef,
   OnInit,
+  TemplateRef,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormArray,
@@ -13,6 +16,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { justNumbersValidation } from '@validation/just-numbers.validation';
+import { TestComponent } from './components/test.component';
+import { TestDesorator } from './decorators/test.decorator';
+import { DynamicDirective } from './directives/dynamic.directive';
 import { DataService } from './services/data.service';
 
 const useDataService = () => {
@@ -30,22 +36,30 @@ let useDataServiceProvider = {
   styleUrls: ['./app.component.sass'],
   providers: [useDataServiceProvider],
 })
-
+@TestDesorator({
+  name: 'data',
+})
 export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('getRef') getRef!: ElementRef<any>;
+  @ViewChild(DynamicDirective, { static: true }) targetDiv!: DynamicDirective;
   dataForm!: FormGroup;
   dataToShow: any[];
+  testValue: any;
 
-  constructor(private fb: FormBuilder, private dataService: DataService) {
+  constructor(
+    private fb: FormBuilder,
+    private dataService: DataService,
+  ) {
     this.dataForm = this.fb.group({
       id: this.fb.control('', [Validators.required, justNumbersValidation()]),
       name: this.fb.control(''),
     });
     this.dataToShow = [];
+    this.testValue = 'test';
   }
 
   ngOnInit(): void {
     this.getDataFromService();
+    this.doSomething();
   }
 
   getDataFromService() {
@@ -61,9 +75,23 @@ export class AppComponent implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  ngAfterViewInit(): void {
-    console.log(this.dataForm);
+  generateComponent(): void {
+   let component = this.targetDiv.view.createComponent(TestComponent);
+   component.instance.data = {
+     title: 'test component'
+   }
   }
+
+  removeComponent(): void {
+
+    this.targetDiv
+  }
+
+  ngAfterViewInit(): void {
+    console.log(this.targetDiv);
+  }
+
+  doSomething() {}
 
   get id() {
     return this.dataForm.controls['id'];
