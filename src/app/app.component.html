@@ -1,18 +1,1 @@
-<h1 #getRef>test</h1>
-
-<form [formGroup]="dataForm" (submit)="postData()">
-    <input type="text" formControlName='id' placeholder="id">
-    <span *ngIf="id.hasError('justNumberError')">{{'just number error' | textWithHere}}</span>
-    <span *ngIf="id.hasError('required')">{{'required' | titlecase}}</span>
-    <input type="text" formControlName='name' placeholder="name">
-    <input type="submit" value='Post'>
-</form>
-
-<ng-container *ngFor="let data of dataToShow">
-    <h1>{{data.name}}</h1>
-</ng-container>
-<div *appNgIfTest='true'>Dive here</div>
-<ng-template appDynamic></ng-template>
-
-<button (click)='generateComponent()'>{{'generate Component' | titlecase}}</button>
-<button (click)='removeComponent()'>{{'remove Component' | titlecase}}</button>
+<router-outlet></router-outlet>

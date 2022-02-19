@@ -27,9 +27,6 @@ export class TestDirective {
   ) {}
 
   createSomething() {
-
-    //   console.log(this.template);
-
-    //    this.view.createEmbeddedView(this.template)
+    // this.view.createEmbeddedView(this.template)
   }
 }

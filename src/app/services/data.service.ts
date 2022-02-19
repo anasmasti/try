@@ -1,13 +1,22 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { from, Observable, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  EMPTY,
+  from,
+  map,
+  Observable,
+  shareReplay,
+  startWith,
+  tap,
+} from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class DataService {
   data: any[];
+  headers: HttpHeaders;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.data = [
       { id: 1, name: 'anas' },
       { id: 2, name: 'anas2' },
@@ -15,6 +24,9 @@ export class DataService {
       { id: 4, name: 'anas4' },
       { id: 5, name: 'anas5' },
     ];
+    this.headers = new HttpHeaders({
+      'content-type': 'application/json',
+    });
   }
 
   getData(): Observable<any> {
@@ -22,7 +34,21 @@ export class DataService {
     return dataToSend;
   }
 
-  postData() {
-    console.log('data posted');
+  getDataFromApi(): Observable<any> {
+ 
+     return this.http
+        .get('http://localhost:3000/posts')
+        .pipe(
+          shareReplay(1),
+        )
+    }
+    
+
+
+  postDataFromApi(post: any): Observable<any> {
+    let body = JSON.stringify(post);
+    return this.http.post('http://localhost:3000/posts', body, {
+      headers: this.headers,
+    });
   }
 }
