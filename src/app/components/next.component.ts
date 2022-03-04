@@ -6,6 +6,5 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class NextComponent {
 
-  constructor() {
-  }
+  constructor() {}
 }

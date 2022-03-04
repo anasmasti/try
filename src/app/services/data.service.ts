@@ -35,15 +35,8 @@ export class DataService {
   }
 
   getDataFromApi(): Observable<any> {
- 
-     return this.http
-        .get('http://localhost:3000/posts')
-        .pipe(
-          shareReplay(1),
-        )
-    }
-    
-
+    return this.http.get('http://localhost:3000/posts').pipe(shareReplay(1));
+  }
 
   postDataFromApi(post: any): Observable<any> {
     let body = JSON.stringify(post);
